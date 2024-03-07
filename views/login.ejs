@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="body">
+      <div class="form">
+        <form action="/login" method="post">
+          <h1>Login</h1>
+          <div class="input">
+            <input
+              type="email"
+              required
+              placeholder="Username"
+              name="email"
+              id="email"
+            />
+            <i class="bx bxs-user"></i>
+          </div>
+          <div class="input">
+            <input
+              type="password"
+              required
+              placeholder="Password"
+              name="password"
+              id="password"
+            />
+            <i class="bx bx-lock-alt"></i>
+          </div>
+          <div class="forget-remamber">
+            <div class="checkbox">
+              <input
+                id="Remamber Me"
+                type="checkbox"
+                name="Remamber Me"
+                value="Remamber Me"
+              />
+              <label for="Remamber Me">Remamber Me</label>
+            </div>
+            <a href="#">forget password ?</a>
+          </div>
+          <input class="login" type="submit" value="Login" />
+          <div class="link-register">
+            <p>dont have an account? <a href="/signup">register</a></p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
