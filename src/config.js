@@ -9,12 +9,12 @@ connect
     console.log("database filled connection");
   });
 
-const loginschema = new mongose.Schema({
-  name: {
+const schema_web = new mongose.Schema({
+  FirstName: {
     type: String,
     requierd: true,
   },
-  name2: {
+  LastName: {
     type: String,
     requierd: true,
   },
@@ -43,6 +43,6 @@ const loginschema = new mongose.Schema({
     requierd: true,
   },
 });
-const collection = new mongose.model("users", loginschema);
+const collection = new mongose.model("users", schema_web);
 
 module.exports = collection;

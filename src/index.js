@@ -3,49 +3,53 @@ const path = require("path");
 const bcrypt = require("bcrypt");
 const collection = require("./config");
 const app = express();
+try {
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: false }));
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+  app.set("view engine", "ejs");
 
-app.set("view engine", "ejs");
-
-// app.get("/", (req, res) => {
-//   res.render("login");
-// });
-app.get("/signup", (req, res) => {
-  res.render("signup");
-});
-app.use(express.static("public"));
-
-app.post("/signup", async (req, res) => {
-  const data = {
-    name: req.body.name,
-    name2: req.body.name2,
-    email: req.body.email,
-    password: req.body.password,
-    gender: req.body.gender,
-    date: req.body.date,
-    username: req.body.username,
-    phone: req.body.phone,
-  };
-  const extUser = await collection.findOne({
-    username: data.username,
-    email: data.email,
+  // app.get("/", (req, res) => {
+  //   res.render("login");
+  // });
+  app.get("/signup", (req, res) => {
+    res.render("signup");
   });
-  if (extUser) {
-    res.send(
-      "User already exists. Please choose a different username and email."
-    );
-  } else {
-    const saltrounds = 10;
-    const hashPassword = await bcrypt.hash(data.password, saltrounds);
-    data.password = hashPassword;
+  app.use(express.static("public"));
 
-    const userData = await collection.insertMany(data);
-    console.log(userData);
-    res.redirect("/");
-  }
-});
+  app.post("/signup", async (req, res) => {
+    const data = {
+      FirstName: req.body.FirstName,
+      LastName: req.body.LastName,
+      email: req.body.email,
+      password: req.body.password,
+      gender: req.body.gender,
+      date: req.body.date,
+      username: req.body.username,
+      phone: req.body.phone,
+    };
+    const extUser = await collection.findOne({
+      username: data.username,
+      email: data.email,
+    });
+    if (extUser) {
+      res.send(
+        "User already exists. Please choose a different username and email."
+      );
+    } else {
+      const saltrounds = 10;
+      const hashPassword = await bcrypt.hash(data.password, saltrounds);
+      data.password = hashPassword;
+
+      const userData = await collection.insertMany(data);
+      console.log(userData);
+      res.redirect("/");
+    }
+  });
+} catch (err) {
+  const error = "something wrong!";
+  console.log(error);
+}
 
 //login
 // app.post("/login", async (req, res) => {
