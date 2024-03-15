@@ -1,15 +1,20 @@
-const mongose = require("mongoose");
-const connect = mongose.connect("mongodb://localhost:27017/login-tut");
-
+const mongoose = require("mongoose");
+// const connect = mongoose.connect("mongodb://localhost:27017/Login-tut");
+const dot_env = require("dotenv");
+const path = require("path");
+dot_env.config({ path: path.join(__dirname, ".env") });
+const DB_URL = process.env.DB_URL;
+const connect = mongoose.connect(DB_URL);
+console.log(DB_URL);
 connect
   .then(() => {
     console.log("database is connencted");
   })
-  .catch(() => {
-    console.log("database filled connection");
+  .catch((err) => {
+    console.log("database filled to connection", err);
   });
-
-const schema_web = new mongose.Schema({
+//create schema
+const schema_web = new mongoose.Schema({
   FirstName: {
     type: String,
     requierd: true,
@@ -22,7 +27,7 @@ const schema_web = new mongose.Schema({
     type: String,
     requierd: true,
   },
-  date: {
+  BirthDay: {
     type: String,
     requierd: true,
   },
@@ -43,6 +48,6 @@ const schema_web = new mongose.Schema({
     requierd: true,
   },
 });
-const collection = new mongose.model("users", schema_web);
-
-module.exports = collection;
+//collaction part
+const collaction = new mongoose.model("users", schema_web);
+module.exports = collaction;

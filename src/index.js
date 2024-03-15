@@ -1,22 +1,22 @@
+//
 const express = require("express");
-const path = require("path");
+const pasth = require("path");
 const bcrypt = require("bcrypt");
-const collection = require("./config");
+const collaction = require("./config");
+
 const app = express();
+
+// convert data into json format تحويل البيانات إلى تنسيق json
+app.use(express.json()); //هذا السطر يستخدم middleware من Express.js للمساعدة في تحليل
+app.use(express.urlencoded({ extended: false }));
+
+//static file css
+app.use(express.static("public"));
+
+//API
+// register user
+//----signup--------
 try {
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: false }));
-
-  app.set("view engine", "ejs");
-
-  // app.get("/", (req, res) => {
-  //   res.render("login");
-  // });
-  app.get("/signup", (req, res) => {
-    res.render("signup");
-  });
-  app.use(express.static("public"));
-
   app.post("/signup", async (req, res) => {
     const data = {
       FirstName: req.body.FirstName,
@@ -24,58 +24,59 @@ try {
       email: req.body.email,
       password: req.body.password,
       gender: req.body.gender,
-      date: req.body.date,
+      BirthDay: req.body.date,
       username: req.body.username,
       phone: req.body.phone,
     };
-    const extUser = await collection.findOne({
+    const extUser = await collaction.findOne({
       username: data.username,
       email: data.email,
     });
     if (extUser) {
-      res.send(
-        "User already exists. Please choose a different username and email."
-      );
+      res.status(400).send({
+        message:
+          "User already exists. Please choose a different username and email.",
+      });
     } else {
       const saltrounds = 10;
       const hashPassword = await bcrypt.hash(data.password, saltrounds);
       data.password = hashPassword;
 
-      const userData = await collection.insertMany(data);
+      const userData = await collaction.insertMany(data);
       console.log(userData);
-      res.redirect("/");
+      // res.render("login")
     }
   });
 } catch (err) {
-  const error = "something wrong!";
-  console.log(error);
+  res.status(500).send({ error: err });
 }
 
-//login
-// app.post("/login", async (req, res) => {
-//   try {
-//     const check = await collection.findOne({
-//       username: req.body.username,
-//     });
-//     if (!check) {
-//       res.send("cannot found user");
-//     }
-//     const isPasswordMatch = await bcrypt.compare(
-//       req.body.password,
-//       check.password
-//     );
-//     if (isPasswordMatch) {
-//       res.render("home");
-//     } else {
-//       req.send("wrong password or email..!");
-//     }
-//     console.log(check);
-//   } catch {
-//     console.log(error);
-//     res.send("wrong detials");
-//   }
-// });
-const port = 3626;
+// ---------------------------------------------------------
+//--login---
+//login user
+app.post("/login", async (req, res) => {
+  try {
+    const check = await collaction.findOne({ name: req.body.username });
+    if (!check) {
+      res.send("wrong Email");
+    } else {
+      //compare the hash password from the database with the plain taxt
+      const isPasswordMatch = await bcrypt.compare(
+        req.body.password,
+        check.password
+      );
+      if (isPasswordMatch) {
+        // res.render('home')
+      } else {
+        res.send("wrong Email");
+      }
+    }
+  } catch {
+    res.send("wrong Email erro");
+  }
+});
+
+const port = 5000;
 app.listen(port, () => {
-  console.log(`server running on port:${port}`);
+  console.log(`server run port on ${port}`);
 });
