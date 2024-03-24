@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-// const connect = mongoose.connect("mongodb://localhost:27017/Login-tut");
 const dot_env = require("dotenv");
 const path = require("path");
 dot_env.config({ path: path.join(__dirname, ".env") });
@@ -23,14 +22,15 @@ const schema_web = new mongoose.Schema({
     type: String,
     requierd: true,
   },
-  email: {
-    type: String,
-    requierd: true,
-  },
   BirthDay: {
     type: String,
     requierd: true,
   },
+  email: {
+    type: String,
+    requierd: true,
+  },
+
   gender: {
     type: String,
     requierd: true,

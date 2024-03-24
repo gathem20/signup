@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 const collaction = require("./config");
 
 const app = express();
-
+app.set("view engine", "ejs");
 // convert data into json format تحويل البيانات إلى تنسيق json
 app.use(express.json()); //هذا السطر يستخدم middleware من Express.js للمساعدة في تحليل
 app.use(express.urlencoded({ extended: false }));
@@ -17,6 +17,10 @@ app.use(express.static("public"));
 // register user
 //----signup--------
 try {
+  app.get("/signup", (req, res) => {
+    res.render("signup");
+  });
+
   app.post("/signup", async (req, res) => {
     const data = {
       FirstName: req.body.FirstName,
@@ -24,10 +28,11 @@ try {
       email: req.body.email,
       password: req.body.password,
       gender: req.body.gender,
-      BirthDay: req.body.date,
+      BirthDay: req.body.BirthDay,
       username: req.body.username,
       phone: req.body.phone,
     };
+    console.log(data);
     const extUser = await collaction.findOne({
       username: data.username,
       email: data.email,
@@ -50,13 +55,15 @@ try {
 } catch (err) {
   res.status(500).send({ error: err });
 }
-
+app.get("/login", (req, res) => {
+  res.render("login");
+});
 // ---------------------------------------------------------
 //--login---
 //login user
 app.post("/login", async (req, res) => {
   try {
-    const check = await collaction.findOne({ name: req.body.username });
+    const check = await collaction.findOne({ email: req.body.email });
     if (!check) {
       res.send("wrong Email");
     } else {
@@ -66,13 +73,13 @@ app.post("/login", async (req, res) => {
         check.password
       );
       if (isPasswordMatch) {
-        // res.render('home')
+        res.render("home");
       } else {
         res.send("wrong Email");
       }
     }
   } catch {
-    res.send("wrong Email erro");
+    res.send("wrong Email error");
   }
 });
 
