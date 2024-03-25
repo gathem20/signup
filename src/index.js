@@ -1,4 +1,3 @@
-//
 const express = require("express");
 const pasth = require("path");
 const bcrypt = require("bcrypt");
@@ -82,7 +81,9 @@ app.post("/login", async (req, res) => {
     res.send("wrong Email error");
   }
 });
-
+app.get("/logout", (req, res) => {
+  res.redirect("/login");
+});
 const port = 5000;
 app.listen(port, () => {
   console.log(`server run port on ${port}`);
